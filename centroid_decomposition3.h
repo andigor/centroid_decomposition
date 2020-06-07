@@ -8,60 +8,6 @@ using tree_edges = std::vector<std::pair<int, int>>;
 
 using tree_nodes = std::vector<std::vector<int>>;
 
-
-tree_edges fill_test_data()
-{
-  tree_edges ret =
-    // {
-    //     {1, 4}
-    //   , {2, 4}
-    //   , {3, 4}
-    //   , {4, 5}
-    //   , {5, 6}
-    //   , {6, 7}
-    //   , {7, 8}
-    //   , {7, 9}
-    //   , {6, 10}
-    //   , {10, 11}
-    //   , {11, 12}
-    //   , {11, 13}
-    //   , {12, 14}
-    //   , {13, 15}
-    //   , {13, 16}
-    // };
-  //{
-  //   {1,2}
-  // , {2,3}
-  // , {3,4}
-  // , {4,5}
-  // , {5,6}
-  // , {6,7}
-  //};
-  {
-     {1,2}
-   , {1,3}
-   , {1,4}
-   , {4,5}
-   , {4,6}
-   , {4,7}
-   , {5,8}
-  };
-//
-//  tree_edges ret =
-//  {
-//     {1,8}
-//   , {1,6}
-//   , {1,5}
-//   , {1,4}
-//   , {1,3}
-//   , {1,2}
-//   , {4,7}
-//  };
-  return ret;
-}
-
-
-
 struct tree_node
 {
   tree_node(int d)
@@ -241,13 +187,4 @@ struct tree_op
 };
 
 
-int main()
-{
-  tree_edges edges = fill_test_data();
-  tree_op tree(edges);
-  tree_edges centroid_edges;
-  tree.centroid_decompose(0, centroid_edges);
-  std::reverse(centroid_edges.begin(), centroid_edges.end());
-  return 0;
-}
 

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="centroid_decomposition3.cpp">
+    <ClCompile Include="centroid_decomposition3.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
