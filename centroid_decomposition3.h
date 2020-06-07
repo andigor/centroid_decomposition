@@ -186,5 +186,20 @@ struct tree_op
   }
 };
 
-
+// only keep edges to parent
+struct reversed_tree
+{
+  reversed_tree(const tree_edges& edges)
+  {
+    construct(edges);
+  }
+  void construct(const tree_edges& edges)
+  {
+    nodes_.resize(edges.size() + 1, -1);
+    for (const auto& e : edges) {
+      nodes_.at(e.second - 1) = e.first - 1;
+    }
+  }
+  std::vector<int> nodes_;
+};
 
