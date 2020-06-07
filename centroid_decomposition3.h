@@ -57,6 +57,10 @@ struct tree_op
   }
   ~tree_op()
   {
+    clear();
+  }
+  void clear()
+  {
     // TODO: make exception safe
     for (auto n : tree_nodes_) {
       delete n;
