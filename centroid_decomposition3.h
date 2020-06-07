@@ -3,6 +3,7 @@
 #include <vector>
 #include <cassert>
 #include <algorithm>
+#include <deque>
 
 using tree_edges = std::vector<std::pair<int, int>>;
 
@@ -16,6 +17,7 @@ struct tree_node
 
   }
   int data_;
+  int depth_ = -1;
   std::unordered_set<tree_node*> siblings_;
 
   tree_node* first_sibling() const
@@ -187,6 +189,44 @@ struct tree_op
       centroid_edges.push_back(std::make_pair(edge_start + 1, edge_end + 1));
     }
     return centroid_node->data_ - 1;
+  }
+
+  void mark_depths_dfs(int root_node)
+  {
+    auto n = tree_nodes_.at(root_node);
+    n->depth_ = 0;
+
+    std::deque<tree_node*> node_queue;
+    node_queue.push_front(n);
+
+    std::vector<int> visited_nodes(tree_nodes_.size());
+    visited_nodes.at(n->data_- 1) = 1;
+
+    for (;;) {
+      if (node_queue.empty()) {
+        break;
+      }
+
+      auto n = node_queue.back();
+      node_queue.pop_back();
+
+
+      for (auto
+             sibling = n->first_sibling()
+           ; sibling
+           ; sibling = n->next_sibling(sibling)) {
+
+        if (visited_nodes.at(sibling->data_ - 1) == 1) {
+          continue;
+        }
+        visited_nodes.at(sibling->data_ - 1) = 1;
+
+        node_queue.push_front(sibling);
+
+        sibling->depth_ = n->depth_ + 1;
+      }
+
+    }
   }
 };
 
