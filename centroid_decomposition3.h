@@ -19,6 +19,7 @@ struct tree_node
   int data_;
   int depth_ = -1;
   int children_sum_ = 0;
+  tree_node* parent_node_ = nullptr;
 
   std::unordered_set<tree_node*> siblings_;
 
@@ -278,6 +279,39 @@ struct tree_op
       auto new_cur_node = cur_node_info.second;
       auto sibling_of_node_to_visit = cur_node_info.second->first_sibling();
       node_stack.push_back(std::make_pair(new_cur_node, sibling_of_node_to_visit));
+    }
+  }
+
+  void mark_parent_nodes_dfs(int root_node) {
+    std::vector<std::pair<tree_node*, tree_node*>> node_stack;
+    node_stack.push_back(std::make_pair(tree_nodes_.at(root_node), tree_nodes_.at(root_node)->first_sibling()));
+
+    std::vector<int> visited(tree_nodes_.size() + 1, 0);
+    visited.at(tree_nodes_.at(root_node)->data_ - 1) = 1;
+
+    for (;;) {
+      if (node_stack.empty()) {
+        break;
+      }
+      auto& cur_node_info = node_stack.back();
+      auto& cur_node = cur_node_info.first;
+      auto& cur_node_cur_sibling = cur_node_info.second;
+      if (cur_node_cur_sibling == nullptr) {
+        node_stack.pop_back();
+        if (node_stack.empty() == false) {
+          //shift sibling
+          node_stack.back().second = node_stack.back().first->next_sibling(node_stack.back().second);
+        }
+        continue;
+      }
+      if (visited.at(cur_node_cur_sibling->data_ - 1) == 1) {
+        cur_node_cur_sibling = cur_node->next_sibling(cur_node_cur_sibling);
+        continue;
+      }
+      cur_node_cur_sibling->parent_node_ = cur_node;
+      visited.at(cur_node_cur_sibling->data_ - 1) = 1;
+      auto ptr_copy = cur_node_cur_sibling;
+      node_stack.push_back(std::make_pair(ptr_copy, ptr_copy->first_sibling()));
     }
   }
 };
