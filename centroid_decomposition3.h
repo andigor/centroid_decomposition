@@ -51,6 +51,10 @@ struct tree_node
       other->siblings_.erase(this);
     }
   }
+  int distance_to(const tree_node* other_node) const
+  {
+
+  }
 };
 
 struct tree_op
