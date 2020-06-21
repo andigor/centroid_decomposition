@@ -18,6 +18,8 @@ struct tree_node
   }
   int data_;
   int depth_ = -1;
+  int children_sum_ = 0;
+
   std::unordered_set<tree_node*> siblings_;
 
   tree_node* first_sibling() const
@@ -226,6 +228,56 @@ struct tree_op
         sibling->depth_ = n->depth_ + 1;
       }
 
+    }
+  }
+
+  void count_subtree_sum_dfs(int root_node, const std::vector<int>& query_nodes)
+  {
+    std::vector<int> visited(tree_nodes_.size());
+
+    std::vector<std::pair<tree_node*, tree_node*>> node_stack;
+
+    {
+      auto node_to_visit = tree_nodes_.at(root_node);
+
+      node_stack.push_back(std::make_pair(node_to_visit, node_to_visit->first_sibling()));
+      visited.at(node_to_visit->data_ - 1) = 1;
+    }
+
+    for (;;) {
+      if (node_stack.empty()) {
+        break;
+      }
+      auto& cur_node_info = node_stack.back();
+      if (cur_node_info.second == nullptr) {
+        auto node_to_process = node_stack.back().first;
+        int node_children_sum = node_to_process->children_sum_;
+        int node_data         = 0;
+        if (query_nodes.at(node_to_process->data_ - 1) != 0) {
+          node_data = node_stack.back().first->data_;
+        }
+
+        // no children left, pop out
+        node_stack.pop_back();
+        if (node_stack.empty() == false) {
+          //shift next sibling
+          node_stack.back().second = node_stack.back().first->next_sibling(node_stack.back().second);
+          node_stack.back().first->children_sum_ += (node_data + node_children_sum);
+        }
+        continue;
+      }
+
+      if (visited.at(cur_node_info.second->data_ - 1) == 1) {
+        cur_node_info.second = cur_node_info.first->next_sibling(cur_node_info.second);
+        continue;
+      }
+
+      visited.at(cur_node_info.second->data_ - 1) = 1;
+
+
+      auto new_cur_node = cur_node_info.second;
+      auto sibling_of_node_to_visit = cur_node_info.second->first_sibling();
+      node_stack.push_back(std::make_pair(new_cur_node, sibling_of_node_to_visit));
     }
   }
 };
