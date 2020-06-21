@@ -191,7 +191,7 @@ struct tree_op
     return centroid_node->data_ - 1;
   }
 
-  void mark_depths_dfs(int root_node)
+  void mark_depths_bfs(int root_node)
   {
     auto n = tree_nodes_.at(root_node);
     n->depth_ = 0;
