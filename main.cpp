@@ -42,6 +42,17 @@ int main()
   centroid_tree.mark_parent_nodes_dfs(centroid_root);
   //reversed_tree centroid_tree(centroid_edges);
 
+  for (auto q : seq) {
+    auto cur_node = centroid_tree.tree_nodes_.at(q - 1);
+    auto parent_node_lca = cur_node->parent_node_;
+    for (;;) {
+      if (parent_node_lca == nullptr) {
+        break;
+      }
+      // distance between currrent node and LCA
+      tree.
+    }
+  }
   return 0;
 }
 
